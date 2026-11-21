@@ -10,12 +10,13 @@ public static class DependencyInjection
 {
     /// <summary>
     /// Registers the pipeline. The sources (<see cref="IExtractionSource"/>) and
-    /// <see cref="ExtractionSettings"/> are registered by Infrastructure.
+    /// <see cref="ExtractionSettings"/> are registered by Infrastructure. The pipeline is scoped:
+    /// the host creates one scope per run, so each run gets fresh sources and HTTP clients.
     /// </summary>
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.TryAddSingleton(TimeProvider.System);
-        services.AddSingleton<IExtractionPipeline, ExtractionPipeline>();
+        services.AddScoped<IExtractionPipeline, ExtractionPipeline>();
         return services;
     }
 }
