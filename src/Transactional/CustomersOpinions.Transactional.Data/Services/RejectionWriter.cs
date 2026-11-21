@@ -4,7 +4,6 @@ using CsvHelper;
 
 namespace CustomersOpinions.Transactional.Data.Services;
 
-/// <summary>Writes the rejected records to <c>rejected_yyyyMMdd_HHmmss.csv</c>.</summary>
 public static class RejectionWriter
 {
     public static string Save(IEnumerable<Rejection> rejections, string folder)

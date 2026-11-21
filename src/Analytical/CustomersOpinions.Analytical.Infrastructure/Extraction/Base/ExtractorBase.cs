@@ -11,12 +11,6 @@ using Polly;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Extraction.Base;
 
-/// <summary>
-/// Template Method for every extractor: timing and logs, conversion of infrastructure exceptions
-/// into a single <see cref="ErrorType.SourceUnavailable"/> failure, extraction metadata on each
-/// record and length checks against the staging columns.
-/// </summary>
-/// <typeparam name="TRecord">Staging record type.</typeparam>
 public abstract class ExtractorBase<TRecord> : IExtractor<TRecord> where TRecord : StagingRecord
 {
     private readonly StagingTableMap<TRecord> _map;
@@ -35,7 +29,6 @@ public abstract class ExtractorBase<TRecord> : IExtractor<TRecord> where TRecord
 
     protected ILogger Logger { get; }
 
-    /// <summary>Source specific extraction: yields raw records (metadata is added by the base class).</summary>
     protected abstract IAsyncEnumerable<Result<TRecord>> ExtractCoreAsync(CancellationToken cancellationToken);
 
     public async IAsyncEnumerable<Result<TRecord>> ExtractAsync([EnumeratorCancellation] CancellationToken cancellationToken)
@@ -101,7 +94,6 @@ public abstract class ExtractorBase<TRecord> : IExtractor<TRecord> where TRecord
     {
         DbException or HttpRequestException or IOException or TimeoutException
             or UnauthorizedAccessException or JsonException or ExecutionRejectedException => true,
-        // HttpClient reports its timeouts as cancellation; real cancellation is rethrown
         OperationCanceledException => !cancellationToken.IsCancellationRequested,
         _ => false
     };

@@ -4,10 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Reading;
 
-/// <summary>
-/// Picks the registered <see cref="IFileReader{TRow}"/> whose extensions match the file.
-/// Supporting Excel later means registering an <c>ExcelFileReader&lt;TRow&gt;</c>; nothing else changes.
-/// </summary>
 public sealed class FileReaderResolver : IFileReaderResolver
 {
     private readonly IServiceProvider _services;

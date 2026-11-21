@@ -4,7 +4,6 @@ using CustomersOpinions.Transactional.Data.Services.Exceptions;
 
 namespace CustomersOpinions.Transactional.Data.Services.Validation;
 
-/// <summary>Collects every validation error of a record so the rejection reason lists all of them.</summary>
 public sealed class Validator
 {
     public const string DateFormat = "yyyy-MM-dd";

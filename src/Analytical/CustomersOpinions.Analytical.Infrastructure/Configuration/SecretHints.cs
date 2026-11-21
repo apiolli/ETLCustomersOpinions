@@ -1,6 +1,5 @@
 namespace CustomersOpinions.Analytical.Infrastructure.Configuration;
 
-/// <summary>Validation messages that tell how to configure each secret (never its value).</summary>
 internal static class SecretHints
 {
     private const string Project = "--project src/Analytical/CustomersOpinions.Analytical.Worker";

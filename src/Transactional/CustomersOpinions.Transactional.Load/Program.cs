@@ -2,10 +2,6 @@ using System.Text;
 using CustomersOpinions.Transactional.Data.Services;
 using CustomersOpinions.Transactional.Load;
 
-// usage:
-//   dotnet run --project src/Transactional/CustomersOpinions.Transactional.Load            -> loads the original CSV files
-//   dotnet run --project src/Transactional/CustomersOpinions.Transactional.Load -- dirty   -> validation test (saves nothing)
-
 Console.OutputEncoding = Encoding.UTF8;
 
 try

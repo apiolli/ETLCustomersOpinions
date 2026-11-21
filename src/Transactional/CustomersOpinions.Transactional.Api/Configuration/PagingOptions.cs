@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CustomersOpinions.Transactional.Api.Configuration;
 
-/// <summary>Paging limits of the social comments endpoint (section <c>Paging</c>).</summary>
 public sealed class PagingOptions
 {
     public const string SectionName = "Paging";

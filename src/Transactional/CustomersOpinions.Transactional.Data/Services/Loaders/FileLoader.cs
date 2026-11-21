@@ -7,10 +7,6 @@ using Microsoft.Data.SqlClient;
 
 namespace CustomersOpinions.Transactional.Data.Services.Loaders;
 
-/// <summary>
-/// Template for loading one CSV file: read, validate, transform, detect duplicates and insert.
-/// A bad record is rejected and never stops the file.
-/// </summary>
 public abstract class FileLoader<TCsv, TModel> : IFileLoader
 {
     private static readonly HashSet<int> RecordErrors = new() { 547, 2601, 2627, 2628, 8152 };

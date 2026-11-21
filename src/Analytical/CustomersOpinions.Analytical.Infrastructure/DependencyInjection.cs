@@ -20,15 +20,10 @@ using Microsoft.Extensions.Options;
 
 namespace CustomersOpinions.Analytical.Infrastructure;
 
-/// <summary>Registers the Infrastructure layer: options, readers, persistence, API client and sources.</summary>
 public static class DependencyInjection
 {
     private const string ApiKeyHeader = "X-Api-Key";
 
-    /// <summary>
-    /// Binds and validates the options at startup and registers every source as an
-    /// <see cref="IExtractionSource"/>. Adding a source only touches this method, never the pipeline.
-    /// </summary>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         AddValidatedOptions<ConnectionStringsOptions>(services, configuration, ConnectionStringsOptions.SectionName);
@@ -52,7 +47,6 @@ public static class DependencyInjection
 
         services.AddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
 
-        // file readers (Strategy): register an ExcelFileReader<SurveyFileRow> here to support .xlsx
         services.AddSingleton<ClassMap<SurveyFileRow>, SurveyFileRowMap>();
         services.AddSingleton<IFileReader<SurveyFileRow>, CsvFileReader<SurveyFileRow>>();
         services.AddSingleton<IFileReaderResolver, FileReaderResolver>();
@@ -95,7 +89,6 @@ public static class DependencyInjection
             })
             .AddStandardResilienceHandler();
 
-        // RetryCount and TimeoutSeconds come from Sources:SocialComments
         services.AddOptions<HttpStandardResilienceOptions>(resilienceBuilder.PipelineName)
             .Configure<IOptions<SocialCommentsSourceOptions>>((resilience, source) =>
             {
@@ -107,7 +100,6 @@ public static class DependencyInjection
                 resilience.Retry.UseJitter = true;
                 resilience.TotalRequestTimeout.Timeout = total;
                 resilience.AttemptTimeout.Timeout = attempt;
-                // the circuit breaker sampling window must be at least twice the attempt timeout
                 var sampling = attempt * 2;
                 if (resilience.CircuitBreaker.SamplingDuration < sampling)
                     resilience.CircuitBreaker.SamplingDuration = sampling;

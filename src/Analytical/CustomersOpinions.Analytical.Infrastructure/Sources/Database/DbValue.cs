@@ -3,10 +3,8 @@ using System.Globalization;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Sources.Database;
 
-/// <summary>Converts typed database values to raw text with the invariant culture.</summary>
 internal static class DbValue
 {
-    /// <summary>Dates as <c>yyyy-MM-dd</c>, booleans as "1"/"0", numbers invariant, null stays null.</summary>
     public static string? Text(DbDataReader reader, int ordinal)
     {
         if (reader.IsDBNull(ordinal))

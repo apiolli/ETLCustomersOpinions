@@ -9,7 +9,6 @@ namespace CustomersOpinions.Transactional.Data.Services.Loaders;
 
 public sealed class SurveysLoader : FileLoader<SurveyCsv, Survey>
 {
-    // classification values are CSV data and stay in Spanish
     private static readonly Dictionary<string, (int Min, int Max)> RangeByClassification =
         new(StringComparer.OrdinalIgnoreCase)
         {

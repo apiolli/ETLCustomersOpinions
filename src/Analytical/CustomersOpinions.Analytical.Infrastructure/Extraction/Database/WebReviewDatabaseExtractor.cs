@@ -9,7 +9,6 @@ using Microsoft.Extensions.Options;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Extraction.Database;
 
-/// <summary>Database component: web reviews → <c>Staging.WebReviews</c>.</summary>
 public sealed class WebReviewDatabaseExtractor : DatabaseExtractorBase<StagingWebReview>
 {
     public WebReviewDatabaseExtractor(IDbConnectionFactory connections, IOptionsMonitor<DatabaseSourceOptions> options,

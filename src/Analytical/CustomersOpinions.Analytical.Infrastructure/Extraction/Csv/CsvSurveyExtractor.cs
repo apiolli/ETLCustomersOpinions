@@ -9,7 +9,6 @@ using Microsoft.Extensions.Options;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Extraction.Csv;
 
-/// <summary>CSV component: internal surveys (<c>surveys_part1.csv</c>) → <c>Staging.Surveys</c>.</summary>
 public sealed class CsvSurveyExtractor : FileExtractorBase<SurveyFileRow, StagingSurvey>
 {
     public CsvSurveyExtractor(IFileReaderResolver resolver, IOptions<SurveysSourceOptions> options,

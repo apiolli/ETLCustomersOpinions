@@ -2,7 +2,6 @@ using CsvHelper.Configuration;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Sources.Csv;
 
-/// <summary>Maps the Spanish headers of the survey file.</summary>
 public sealed class SurveyFileRowMap : ClassMap<SurveyFileRow>
 {
     public SurveyFileRowMap()

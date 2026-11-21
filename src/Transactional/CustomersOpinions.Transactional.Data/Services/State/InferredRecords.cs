@@ -3,13 +3,8 @@ using CustomersOpinions.Transactional.Data.Models;
 
 namespace CustomersOpinions.Transactional.Data.Services.State;
 
-/// <summary>
-/// Creates inferred (placeholder) customers and products referenced by surveys
-/// that do not exist yet, when enabled by configuration.
-/// </summary>
 public sealed class InferredRecords : IInferredRecords
 {
-    /// <summary>Category assigned to inferred products (stored data value, kept in Spanish).</summary>
     public const string UncategorizedName = "Sin categoría";
 
     private readonly IInsertDao<Customer> _customerDao;

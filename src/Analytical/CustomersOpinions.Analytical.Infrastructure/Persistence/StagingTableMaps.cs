@@ -2,10 +2,6 @@ using CustomersOpinions.Analytical.Domain.Staging;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Persistence;
 
-/// <summary>
-/// Maps of the five staging tables, matching <c>database/analytical/02_CreateStaging.sql</c>.
-/// Table names come only from here, never from configuration or input.
-/// </summary>
 public static class StagingTableMaps
 {
     private const string Schema = "Staging";
@@ -61,7 +57,6 @@ public static class StagingTableMaps
         },
         r => new object?[] { r.ProductId, r.Name, r.Category, r.IsInferred, r.SourceName, r.ExtractedAt });
 
-    /// <summary>Qualified names of every known staging table (allow list for TRUNCATE).</summary>
     public static readonly IReadOnlySet<string> KnownTables = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
         Surveys.QualifiedName, WebReviews.QualifiedName, SocialComments.QualifiedName,

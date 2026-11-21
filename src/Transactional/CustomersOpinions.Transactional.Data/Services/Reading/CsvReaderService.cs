@@ -6,7 +6,6 @@ using CustomersOpinions.Transactional.Data.Services.Exceptions;
 
 namespace CustomersOpinions.Transactional.Data.Services.Reading;
 
-/// <summary>CsvHelper based reader: validates the header and yields one <see cref="CsvRow{T}"/> per line.</summary>
 public sealed class CsvReaderService : ICsvReader
 {
     private static readonly CsvConfiguration Configuration = new(CultureInfo.InvariantCulture)

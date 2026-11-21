@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 
 namespace CustomersOpinions.Transactional.Api.Endpoints;
 
-/// <summary>Maps <c>GET /api/v1/social-comments</c> and <c>GET /health</c>.</summary>
 public static class SocialCommentEndpoints
 {
     public static IEndpointRouteBuilder MapSocialCommentEndpoints(this IEndpointRouteBuilder app)

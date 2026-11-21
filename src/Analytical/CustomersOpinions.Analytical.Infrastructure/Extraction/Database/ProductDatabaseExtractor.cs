@@ -9,7 +9,6 @@ using Microsoft.Extensions.Options;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Extraction.Database;
 
-/// <summary>Master data for <c>DimProducto</c> → <c>Staging.Products</c>.</summary>
 public sealed class ProductDatabaseExtractor : DatabaseExtractorBase<StagingProduct>
 {
     public ProductDatabaseExtractor(IDbConnectionFactory connections, IOptionsMonitor<DatabaseSourceOptions> options,

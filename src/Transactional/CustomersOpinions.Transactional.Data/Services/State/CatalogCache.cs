@@ -3,7 +3,6 @@ using CustomersOpinions.Transactional.Data.Models;
 
 namespace CustomersOpinions.Transactional.Data.Services.State;
 
-/// <summary>Caches catalog ids to avoid one database call per record.</summary>
 public sealed class CatalogCache : ICatalogs
 {
     private readonly ICatalogDao _dao;

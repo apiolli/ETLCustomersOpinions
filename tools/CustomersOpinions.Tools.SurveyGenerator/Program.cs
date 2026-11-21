@@ -1,8 +1,6 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using CustomersOpinions.Tools.SurveyGenerator;
-
-// usage: dotnet run --project tools/CustomersOpinions.Tools.SurveyGenerator -- --count 50000 --output data/performance/surveys_50k.csv
 
 var arguments = GeneratorArguments.Parse(args);
 if (arguments.Error != null)

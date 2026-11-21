@@ -1,6 +1,5 @@
 namespace CustomersOpinions.Analytical.Domain.Staging;
 
-/// <summary>Web review read from the transactional database (table <c>Staging.WebReviews</c>).</summary>
 public sealed record StagingWebReview : StagingRecord
 {
     public string? ReviewId { get; init; }

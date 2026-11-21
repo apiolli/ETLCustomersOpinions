@@ -1,6 +1,5 @@
 namespace CustomersOpinions.Transactional.Data.Services;
 
-/// <summary>Counts and rejections of one loaded file.</summary>
 public sealed class LoadResult
 {
     public LoadResult(string fileName) => FileName = fileName;
@@ -17,7 +16,6 @@ public sealed class LoadResult
     public void Reject(int row, string? recordId, string reason) =>
         Rejections.Add(new Rejection(FileName, row, recordId, reason));
 
-    /// <summary>Marks the file as rolled back: nothing it inserted was kept.</summary>
     public void RollBack(string error)
     {
         FileError = error;

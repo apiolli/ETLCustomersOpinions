@@ -7,11 +7,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CustomersOpinions.Analytical.Application.Extraction;
 
-/// <summary>
-/// Runs one extractor into its staging table: full refresh, truncating only when the first
-/// valid record arrives, bounded batches and per source metrics.
-/// </summary>
-/// <typeparam name="T">Staging record type.</typeparam>
 public sealed class ExtractionSource<T> : IExtractionSource
 {
     private const int RejectionsLoggedOneByOne = 20;
@@ -96,7 +91,6 @@ public sealed class ExtractionSource<T> : IExtractionSource
             }
         }
 
-        // keep what was already extracted (e.g. an API page fails after the first ones)
         if (buffer.Count > 0 && truncated)
         {
             var flush = await FlushAsync(buffer, cancellationToken);
@@ -106,7 +100,6 @@ public sealed class ExtractionSource<T> : IExtractionSource
                 failure ??= flush.Message;
         }
 
-        // a source that returned no valid rows still replaces the previous content
         if (failure == null && !truncated)
         {
             var truncate = await _repository.TruncateAsync(cancellationToken);
