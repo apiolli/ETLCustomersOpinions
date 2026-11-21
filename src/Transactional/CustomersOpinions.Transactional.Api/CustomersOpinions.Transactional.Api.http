@@ -1,0 +1,40 @@
+### CustomersOpinions.Transactional.Api — sample requests
+### Set @apiKey to the same value configured with:
+###   dotnet user-secrets set "Security:ApiKey" "<key>" --project src/Transactional/CustomersOpinions.Transactional.Api
+
+@baseUrl = https://localhost:7181
+@apiKey = <paste-your-key-here>
+
+### 200 - health check (no API key required)
+GET {{baseUrl}}/health
+
+### 200 - first page with the default page size (500)
+GET {{baseUrl}}/api/v1/social-comments
+X-Api-Key: {{apiKey}}
+
+### 200 - explicit paging
+GET {{baseUrl}}/api/v1/social-comments?pageNumber=2&pageSize=50
+X-Api-Key: {{apiKey}}
+
+### 200 - page out of range returns empty items
+GET {{baseUrl}}/api/v1/social-comments?pageNumber=999&pageSize=500
+X-Api-Key: {{apiKey}}
+
+### 200 - pageSize above Paging:MaxPageSize is clamped to 1000
+GET {{baseUrl}}/api/v1/social-comments?pageNumber=1&pageSize=5000
+X-Api-Key: {{apiKey}}
+
+### 400 - invalid pageNumber
+GET {{baseUrl}}/api/v1/social-comments?pageNumber=0&pageSize=500
+X-Api-Key: {{apiKey}}
+
+### 400 - invalid pageSize
+GET {{baseUrl}}/api/v1/social-comments?pageNumber=1&pageSize=0
+X-Api-Key: {{apiKey}}
+
+### 401 - missing API key
+GET {{baseUrl}}/api/v1/social-comments
+
+### 401 - wrong API key
+GET {{baseUrl}}/api/v1/social-comments
+X-Api-Key: wrong-key
