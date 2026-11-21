@@ -1,0 +1,13 @@
+IdOpinion,IdCliente,IdProducto,Fecha,Comentario,Clasificación,PuntajeSatisfacción,Fuente
+90001,9001,9001,2025-07-15,"Buen producto, llegó a tiempo.",Positiva,5,EncuestaInterna
+90002,9001,9001,2025-07-15,"Muy malo.",Negativa,0,EncuestaInterna
+90003,9001,9001,2025-07-15,"Excelente, lo recomiendo.",Positiva,1,EncuestaInterna
+90004,9001,9001,2025-13-45,"Fecha imposible.",Neutra,3,EncuestaInterna
+90005,9001,9001,2025-07-15,,Neutra,3,EncuestaInterna
+90006,9001,9001,2025-07-15,"Regular.",Mixta,3,EncuestaInterna
+90001,9001,9001,2025-07-16,"Id repetido.",Neutra,3,EncuestaInterna
+90007,9999,9998,2025-07-15,"Cliente y producto fuera de catálogo.",Neutra,3,EncuestaInterna
+90008,9001,9001,2030-01-01,"Fecha en el futuro.",Neutra,3,EncuestaInterna
+90009,9001,9001,2025-07-15,"Buen producto, llegó a tiempo.",Positiva,5,EncuestaInterna
+90010,9001,9001,1899-12-31,"Fecha demasiado antigua.",Neutra,3,EncuestaInterna
+90011,9001,9001,2025-07-15,"Sin fuente.",Neutra,3,

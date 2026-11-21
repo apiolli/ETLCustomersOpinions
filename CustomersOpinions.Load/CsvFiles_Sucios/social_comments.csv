@@ -1,0 +1,10 @@
+IdComment,IdCliente,IdProducto,Fuente,Fecha,Comentario
+T9001,C9001,P9001,Instagram,2025-06-15,Buen producto
+T9002,,P9001,Twitter,2025-08-27,Comentario anónimo válido
+T9003,CXYZ,P9001,Facebook,2025-07-01,Id de cliente mal formado
+T9004,C9001,P9001,Instagram,2025-07-01,
+T9005,C9001,P9001,,2025-07-01,Sin red social
+T9006,C8888,P9001,Instagram,2025-07-01,Cliente inexistente
+T9007,C9001,P9001,Instagram,2025-07-01,Comentario demasiado largo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+T9001,C9001,P9001,Instagram,2025-06-16,Id repetido
+T9008,C99999999999,P9001,Instagram,2025-07-01,Id de cliente demasiado largo

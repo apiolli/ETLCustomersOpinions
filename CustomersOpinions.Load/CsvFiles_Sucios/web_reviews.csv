@@ -1,0 +1,10 @@
+IdReview,IdCliente,IdProducto,Fecha,Comentario,Rating
+W9001,C9001,P9001,2025-01-01,Bien. OK.,4
+W9002,C9001,P9001,2025-01-01,Rating fuera de rango,9
+W9003,C9001,P9001,2025-01-01,Sin rating,
+W9004,C9001,P7777,2025-01-01,Producto inexistente,3
+W9005,,P9001,2025-01-01,Reseña sin cliente,3
+W9006,C9001,P9001,01/05/2025,Fecha con otro formato,3
+W9007,C9001,P9001,2025-01-01,Fila con una columna extra,3,extra
+W9008,C9001,P9001,2025-01-01,Rating no numérico,cinco
+W9009,C9001,P9001,2025-01-01,Bien. OK.,4

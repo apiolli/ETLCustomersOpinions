@@ -1,0 +1,9 @@
+IdCliente,Nombre,Email
+9001,Cliente_9001,cliente9001@mail.com
+9002,Cliente_9002,cliente9002@mail.com
+9002,Cliente_9002b,cliente9002b@mail.com
+9003,,cliente9003@mail.com
+9004,Cliente_9004,cliente9001@mail.com
+9005,Cliente_9005,correo-invalido
+ABC,Cliente_ABC,clienteabc@mail.com
+9006,Cliente_9006,cliente1@mail.com

@@ -1,0 +1,6 @@
+IdProducto,Nombre,Categoría
+9001,Producto_9001,Hogar
+9002,,Ropa
+9003,Producto_9003,
+-5,Producto_negativo,Hogar
+9004,Producto_9004,Mascotas
