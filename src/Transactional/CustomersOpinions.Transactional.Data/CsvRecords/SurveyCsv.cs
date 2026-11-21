@@ -2,7 +2,6 @@ using CsvHelper.Configuration.Attributes;
 
 namespace CustomersOpinions.Transactional.Data.CsvRecords;
 
-/// <summary>Raw row of <c>surveys_part1.csv</c>.</summary>
 public sealed class SurveyCsv
 {
     [Name("IdOpinion")]

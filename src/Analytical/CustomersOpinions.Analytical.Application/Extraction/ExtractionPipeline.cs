@@ -5,10 +5,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CustomersOpinions.Analytical.Application.Extraction;
 
-/// <summary>
-/// Runs every registered <see cref="IExtractionSource"/> in parallel (bounded) and isolates failures:
-/// an unexpected exception marks only that source as failed.
-/// </summary>
 public sealed class ExtractionPipeline : IExtractionPipeline
 {
     private readonly IReadOnlyList<IExtractionSource> _sources;

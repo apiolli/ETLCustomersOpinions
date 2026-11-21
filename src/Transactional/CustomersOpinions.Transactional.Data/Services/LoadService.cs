@@ -4,7 +4,6 @@ using CustomersOpinions.Transactional.Data.Services.State;
 
 namespace CustomersOpinions.Transactional.Data.Services;
 
-/// <summary>Runs every loader in order, one transaction per file.</summary>
 public sealed class LoadService
 {
     private readonly IFileTransaction _transaction;

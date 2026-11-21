@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Persistence;
 
-/// <summary>SQL Server implementation of <see cref="IDbConnectionFactory"/>.</summary>
 public sealed class SqlConnectionFactory : IDbConnectionFactory
 {
     private readonly ConnectionStringsOptions _options;

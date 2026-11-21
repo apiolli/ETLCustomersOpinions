@@ -2,7 +2,6 @@ using System.Globalization;
 
 namespace CustomersOpinions.Tools.SurveyGenerator;
 
-/// <summary>Command line arguments: <c>--count</c> and <c>--output</c>.</summary>
 internal sealed record GeneratorArguments(int Count, string Output, string? Error)
 {
     private const int DefaultCount = 50_000;

@@ -6,10 +6,6 @@ using Microsoft.Extensions.Options;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Sources.Api;
 
-/// <summary>
-/// Typed client of the social comments API (registered with <c>IHttpClientFactory</c>;
-/// base address, API key header and resilience are configured at registration).
-/// </summary>
 public sealed class SocialCommentsApiClient
 {
     private readonly HttpClient _http;
@@ -21,7 +17,6 @@ public sealed class SocialCommentsApiClient
         _options = options.Value;
     }
 
-    /// <summary>Gets one page; a non successful status becomes a <see cref="ErrorType.SourceUnavailable"/> failure.</summary>
     public async Task<Result<PagedResponse<SocialCommentDto>>> GetPageAsync(int pageNumber, CancellationToken cancellationToken)
     {
         var uri = string.Create(CultureInfo.InvariantCulture,

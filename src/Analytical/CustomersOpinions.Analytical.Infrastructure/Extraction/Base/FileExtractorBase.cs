@@ -8,9 +8,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Extraction.Base;
 
-/// <summary>Extractor over a file: resolves the reader by extension and maps each row.</summary>
-/// <typeparam name="TRow">Row model with the shape of the file.</typeparam>
-/// <typeparam name="TRecord">Staging record type.</typeparam>
 public abstract class FileExtractorBase<TRow, TRecord> : ExtractorBase<TRecord> where TRecord : StagingRecord
 {
     private readonly IFileReaderResolver _resolver;
@@ -22,15 +19,12 @@ public abstract class FileExtractorBase<TRow, TRecord> : ExtractorBase<TRecord> 
         FilePath = path;
     }
 
-    /// <summary>Absolute path of the file.</summary>
     protected string FilePath { get; }
 
-    /// <summary>File name, written to the <c>SourceFile</c> column.</summary>
     public override string Name => Path.GetFileName(FilePath);
 
     public override SourceKind SourceKind => SourceKind.File;
 
-    /// <summary>Converts a file row into a staging record.</summary>
     protected abstract TRecord Map(TRow row);
 
     protected override async IAsyncEnumerable<Result<TRecord>> ExtractCoreAsync(

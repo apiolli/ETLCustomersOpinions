@@ -8,13 +8,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Extraction.Base;
 
-/// <summary>
-/// Extractor over a paged REST endpoint: reads pages from 1 until <c>pageNumber &gt; totalPages</c>,
-/// an empty page or <c>MaxPages</c>. Repeated ids across pages are rejected.
-/// A failing page ends the source; records of the previous pages are kept.
-/// </summary>
-/// <typeparam name="TDto">DTO returned by the API.</typeparam>
-/// <typeparam name="TRecord">Staging record type.</typeparam>
 public abstract class ApiExtractorBase<TDto, TRecord> : ExtractorBase<TRecord> where TRecord : StagingRecord
 {
     private readonly int _maxPages;
@@ -24,13 +17,10 @@ public abstract class ApiExtractorBase<TDto, TRecord> : ExtractorBase<TRecord> w
 
     public override SourceKind SourceKind => SourceKind.Api;
 
-    /// <summary>Gets one page of the endpoint.</summary>
     protected abstract Task<Result<PagedResponse<TDto>>> GetPageAsync(int pageNumber, CancellationToken cancellationToken);
 
-    /// <summary>Source id of a DTO, used to detect duplicates across pages.</summary>
     protected abstract string? KeyOf(TDto dto);
 
-    /// <summary>Converts a DTO into a staging record.</summary>
     protected abstract TRecord Map(TDto dto);
 
     protected override async IAsyncEnumerable<Result<TRecord>> ExtractCoreAsync(

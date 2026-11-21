@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Configuration;
 
-/// <summary>Section <c>Sources:SocialComments</c>.</summary>
 public sealed class SocialCommentsSourceOptions : IValidatableObject
 {
     public const string SectionName = "Sources:SocialComments";
@@ -17,7 +16,6 @@ public sealed class SocialCommentsSourceOptions : IValidatableObject
     [Range(1, 1000)]
     public int PageSize { get; set; } = 500;
 
-    /// <summary>Safety limit of pages read in one run.</summary>
     [Range(1, 1_000_000)]
     public int MaxPages { get; set; } = 10_000;
 
@@ -27,10 +25,8 @@ public sealed class SocialCommentsSourceOptions : IValidatableObject
     [Range(1, 10)]
     public int RetryCount { get; set; } = 3;
 
-    /// <summary>Secret: value sent in the <c>X-Api-Key</c> header.</summary>
     public string ApiKey { get; set; } = string.Empty;
 
-    /// <summary>Endpoint URL without credentials, written to <c>Staging.SocialComments.SourceEndpoint</c>.</summary>
     public string EndpointUrl => $"{BaseUrl.TrimEnd('/')}/{Endpoint.TrimStart('/')}";
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

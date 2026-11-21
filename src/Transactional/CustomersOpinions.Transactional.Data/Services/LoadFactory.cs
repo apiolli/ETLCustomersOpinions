@@ -5,7 +5,6 @@ using CustomersOpinions.Transactional.Data.Services.State;
 
 namespace CustomersOpinions.Transactional.Data.Services;
 
-/// <summary>Composes the DAOs, state and loaders, and runs the load of the six CSV files.</summary>
 public static class LoadFactory
 {
     public static LoadSummary Run(string connectionString, string csvFolder, bool dryRun, bool createInferredRecords)

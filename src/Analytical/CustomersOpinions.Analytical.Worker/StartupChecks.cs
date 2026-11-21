@@ -3,10 +3,8 @@ using Microsoft.Extensions.Options;
 
 namespace CustomersOpinions.Analytical.Worker;
 
-/// <summary>Runs the options validation before the host starts and returns readable messages.</summary>
 internal static partial class StartupChecks
 {
-    /// <summary>Returns one message per invalid setting; empty when the configuration is valid.</summary>
     public static IReadOnlyList<string> Validate(IServiceProvider services)
     {
         try
@@ -31,7 +29,6 @@ internal static partial class StartupChecks
             .Distinct()
             .ToList();
 
-    // "DataAnnotation validation failed for 'X' members: 'Y' with the error: '<message>'."
     [GeneratedRegex("with the error: '(.*)'\\.?$")]
     private static partial Regex ErrorText();
 }

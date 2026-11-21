@@ -5,14 +5,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace CustomersOpinions.Analytical.Application;
 
-/// <summary>Registers the Application layer services.</summary>
 public static class DependencyInjection
 {
-    /// <summary>
-    /// Registers the pipeline. The sources (<see cref="IExtractionSource"/>) and
-    /// <see cref="ExtractionSettings"/> are registered by Infrastructure. The pipeline is scoped:
-    /// the host creates one scope per run, so each run gets fresh sources and HTTP clients.
-    /// </summary>
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.TryAddSingleton(TimeProvider.System);

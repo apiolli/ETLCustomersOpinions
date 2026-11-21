@@ -4,10 +4,6 @@ using Microsoft.Extensions.Options;
 
 namespace CustomersOpinions.Analytical.Worker;
 
-/// <summary>
-/// Hosted service that runs the extraction pipeline once (exit code 0 = all sources OK, 1 = a source
-/// failed, 2 = cancelled) or on a <see cref="PeriodicTimer"/> when installed as a Windows Service.
-/// </summary>
 public sealed class ExtractionWorker : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;

@@ -1,6 +1,5 @@
 ﻿namespace CustomersOpinions.Transactional.Data.Services;
 
-/// <summary>Totals of a complete load run.</summary>
 public sealed class LoadSummary
 {
     public bool DryRun { get; init; }

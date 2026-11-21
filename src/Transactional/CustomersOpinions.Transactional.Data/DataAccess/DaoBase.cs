@@ -3,7 +3,6 @@ using Microsoft.Data.SqlClient;
 
 namespace CustomersOpinions.Transactional.Data.DataAccess;
 
-/// <summary>Base class for DAOs: creates stored procedure commands on the shared session.</summary>
 public abstract class DaoBase
 {
     private readonly DbSession _session;
@@ -12,7 +11,6 @@ public abstract class DaoBase
 
     protected SqlCommand CreateCommand(string procedure) => _session.CreateCommand(procedure);
 
-    /// <summary>Runs an insert procedure that reports through the <c>@Insertado</c> output parameter.</summary>
     protected bool ExecuteInsert(string procedure, Action<SqlParameterCollection> addParameters)
     {
         using var cmd = CreateCommand(procedure);

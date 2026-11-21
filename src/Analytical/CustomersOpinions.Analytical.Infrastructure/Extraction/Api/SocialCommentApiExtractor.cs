@@ -10,7 +10,6 @@ using Microsoft.Extensions.Options;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Extraction.Api;
 
-/// <summary>API component: social comments → <c>Staging.SocialComments</c>. A null customer is a valid anonymous comment.</summary>
 public sealed class SocialCommentApiExtractor : ApiExtractorBase<SocialCommentDto, StagingSocialComment>
 {
     private readonly SocialCommentsApiClient _client;
@@ -24,7 +23,6 @@ public sealed class SocialCommentApiExtractor : ApiExtractorBase<SocialCommentDt
         _endpointUrl = options.Value.EndpointUrl;
     }
 
-    /// <summary>Endpoint URL (never the API key), written to <c>SourceEndpoint</c>.</summary>
     public override string Name => _endpointUrl;
 
     protected override Task<Result<PagedResponse<SocialCommentDto>>> GetPageAsync(int pageNumber, CancellationToken cancellationToken) =>

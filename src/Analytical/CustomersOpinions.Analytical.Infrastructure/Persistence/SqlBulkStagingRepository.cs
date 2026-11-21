@@ -6,8 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Persistence;
 
-/// <summary>Generic staging repository: <c>SqlBulkCopy</c> per batch, configured by a <see cref="StagingTableMap{T}"/>.</summary>
-/// <typeparam name="T">Staging record type.</typeparam>
 public sealed class SqlBulkStagingRepository<T> : IStagingRepository<T>
 {
     private const int BulkCopyTimeoutSeconds = 300;
@@ -36,7 +34,6 @@ public sealed class SqlBulkStagingRepository<T> : IStagingRepository<T>
             await using var connection = (SqlConnection)_connections.Create(ConnectionNames.AnalyticalDb);
             await connection.OpenAsync(cancellationToken);
             await using var command = connection.CreateCommand();
-            // the name comes from the allow listed map, never from input
             command.CommandText = $"truncate table [{_map.Schema}].[{_map.Table}];";
             await command.ExecuteNonQueryAsync(cancellationToken);
             _logger.LogDebug("Truncated {Table}", TableName);

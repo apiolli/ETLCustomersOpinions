@@ -9,11 +9,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Extraction.Base;
 
-/// <summary>
-/// Extractor over a relational query: opens a connection to <c>TransactionalDb</c>, runs
-/// <see cref="Query"/> with <see cref="CommandBehavior.SequentialAccess"/> and streams the rows.
-/// </summary>
-/// <typeparam name="TRecord">Staging record type.</typeparam>
 public abstract class DatabaseExtractorBase<TRecord> : ExtractorBase<TRecord> where TRecord : StagingRecord
 {
     private readonly IDbConnectionFactory _connections;
@@ -28,10 +23,8 @@ public abstract class DatabaseExtractorBase<TRecord> : ExtractorBase<TRecord> wh
 
     public override SourceKind SourceKind => SourceKind.Database;
 
-    /// <summary>SELECT with an explicit column list, ordered by the source id.</summary>
     protected abstract string Query { get; }
 
-    /// <summary>Maps the current row (columns must be read in order).</summary>
     protected abstract TRecord Map(DbDataReader reader);
 
     protected override async IAsyncEnumerable<Result<TRecord>> ExtractCoreAsync(

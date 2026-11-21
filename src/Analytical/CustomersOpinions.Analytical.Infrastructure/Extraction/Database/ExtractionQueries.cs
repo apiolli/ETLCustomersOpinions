@@ -1,9 +1,5 @@
 namespace CustomersOpinions.Analytical.Infrastructure.Extraction.Database;
 
-/// <summary>
-/// Queries of the database extractors. They read only the extraction views of
-/// <c>database/transactional/04_ExtractionObjects.sql</c>, with explicit columns and ordered by source id.
-/// </summary>
 internal static class ExtractionQueries
 {
     public const string WebReviewsView = "dbo.vw_ExtractWebReviews";

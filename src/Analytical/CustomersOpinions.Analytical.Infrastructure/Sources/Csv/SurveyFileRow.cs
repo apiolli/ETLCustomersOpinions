@@ -1,6 +1,5 @@
 namespace CustomersOpinions.Analytical.Infrastructure.Sources.Csv;
 
-/// <summary>One row of <c>surveys_part1.csv</c>, as text.</summary>
 public sealed class SurveyFileRow
 {
     public string? OpinionId { get; set; }

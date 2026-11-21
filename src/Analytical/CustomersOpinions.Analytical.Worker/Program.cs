@@ -3,13 +3,10 @@ using CustomersOpinions.Analytical.Application;
 using CustomersOpinions.Analytical.Infrastructure;
 using CustomersOpinions.Analytical.Worker;
 using CustomersOpinions.Analytical.Worker.Presentation;
-using Microsoft.Extensions.Options;
 using Serilog;
 
 Console.OutputEncoding = Encoding.UTF8;
 
-// configuration order: appsettings.json -> appsettings.{Environment}.json -> User Secrets (Development)
-// -> environment variables -> command line
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.Services.AddWindowsService(options => options.ServiceName = "CustomersOpinions Extraction");
@@ -33,7 +30,6 @@ builder.Services.AddHostedService<ExtractionWorker>();
 
 using var host = builder.Build();
 
-// validate the options before starting, to show clear instructions instead of a stack trace
 var configurationErrors = StartupChecks.Validate(host.Services);
 if (configurationErrors.Count > 0)
 {

@@ -3,7 +3,6 @@ using CustomersOpinions.Analytical.Application.Reporting;
 
 namespace CustomersOpinions.Analytical.Worker.Presentation;
 
-/// <summary>Prints the extraction report as a table on the console.</summary>
 public sealed class ConsoleReportRenderer
 {
     private static readonly CultureInfo Culture = CultureInfo.InvariantCulture;

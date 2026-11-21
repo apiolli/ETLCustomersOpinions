@@ -5,7 +5,6 @@ using Microsoft.Data.SqlClient;
 
 namespace CustomersOpinions.Transactional.Api.Data;
 
-/// <summary>ADO.NET implementation over <c>dbo.usp_GetSocialCommentsPage</c>.</summary>
 public sealed class SqlSocialCommentRepository : ISocialCommentRepository
 {
     private const string PageProcedure = "dbo.usp_GetSocialCommentsPage";
@@ -46,7 +45,6 @@ public sealed class SqlSocialCommentRepository : ISocialCommentRepository
             }
         }
 
-        // the output parameter is available only after the reader is closed
         var totalCount = total.Value is int value ? value : 0;
         _logger.LogInformation("Social comments page {PageNumber} (size {PageSize}) returned {Count} of {Total}",
             pageNumber, pageSize, items.Count, totalCount);

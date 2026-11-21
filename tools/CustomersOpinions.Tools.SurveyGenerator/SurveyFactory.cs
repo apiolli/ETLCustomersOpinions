@@ -2,13 +2,8 @@ using System.Globalization;
 
 namespace CustomersOpinions.Tools.SurveyGenerator;
 
-/// <summary>
-/// Deterministic survey rows with the same header as <c>surveys_part1.csv</c>: ids from 100001,
-/// customers 1-500, products 1-200, dates 2024-01-01..2025-12-31 and classification consistent with the score.
-/// </summary>
 internal sealed class SurveyFactory
 {
-    /// <summary>Header of <c>surveys_part1.csv</c> (data, kept in Spanish).</summary>
     public const string Header = "IdOpinion,IdCliente,IdProducto,Fecha,Comentario,Clasificación,PuntajeSatisfacción,Fuente";
 
     private const int FirstId = 100_001;
@@ -16,7 +11,6 @@ internal sealed class SurveyFactory
     private static readonly DateTime FirstDate = new(2024, 1, 1);
     private static readonly int DateRangeDays = (new DateTime(2025, 12, 31) - FirstDate).Days + 1;
 
-    // comments are CSV data in Spanish, grouped by classification
     private static readonly string[] Negative =
     {
         "El producto llegó dañado y nadie respondió mi reclamo.",
@@ -48,7 +42,6 @@ internal sealed class SurveyFactory
 
     public SurveyFactory(int seed) => _random = new Random(seed);
 
-    /// <summary>Yields <paramref name="count"/> CSV lines (without the header).</summary>
     public IEnumerable<string> Generate(int count)
     {
         for (var i = 0; i < count; i++)

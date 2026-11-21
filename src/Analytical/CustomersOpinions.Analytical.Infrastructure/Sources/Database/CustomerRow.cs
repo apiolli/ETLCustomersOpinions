@@ -2,7 +2,6 @@ using System.Data.Common;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Sources.Database;
 
-/// <summary>Row of <c>dbo.vw_ExtractCustomers</c> (columns read in query order).</summary>
 public sealed record CustomerRow(string? IdCliente, string? Nombre, string? Email, string? EsInferido)
 {
     public static CustomerRow Read(DbDataReader r) => new(

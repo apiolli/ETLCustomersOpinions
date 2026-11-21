@@ -2,7 +2,6 @@ using System.Text.RegularExpressions;
 
 namespace CustomersOpinions.Transactional.Data.Services.Validation;
 
-/// <summary>Expected formats of the prefixed source ids.</summary>
 public sealed record Pattern(Regex Regex, string Description)
 {
     public static readonly Pattern CustomerId = Create(@"^C\d{3,9}$", "C###");

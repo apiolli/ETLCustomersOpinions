@@ -4,10 +4,6 @@ using Microsoft.Data.SqlClient;
 
 namespace CustomersOpinions.Transactional.Data.DataAccess;
 
-/// <summary>
-/// Owns the SQL connection and the transaction of each file. In dry-run mode a single
-/// transaction wraps the whole run (one savepoint per file) and is rolled back at the end.
-/// </summary>
 public sealed class DbSession : IFileTransaction, IDisposable
 {
     private readonly SqlConnection _connection;
@@ -58,7 +54,6 @@ public sealed class DbSession : IFileTransaction, IDisposable
         }
         catch (InvalidOperationException)
         {
-            // the server already ended the transaction, so there is nothing to roll back
         }
 
         if (!IsDryRun)
