@@ -149,6 +149,7 @@ src/Analytical/
 │   │   ├── Result.cs                    Result y Result<T> (IsSuccess, Message, ErrorType, Value)
 │   │   └── ErrorType.cs                 None, Validation, SourceUnavailable, Persistence, Unexpected
 │   ├── Staging/                         un registro por tabla staging (texto crudo + metadatos)
+│   │   ├── StagingRecord.cs             base abstracta: SourceName, ExtractedAt, WithMetadata()
 │   │   ├── StagingSurvey.cs
 │   │   ├── StagingWebReview.cs
 │   │   ├── StagingSocialComment.cs
@@ -163,7 +164,7 @@ src/Analytical/
 │           └── FactOpinionKeyword.cs
 ├── CustomersOpinions.Analytical.Application/
 │   ├── Abstractions/
-│   │   ├── Extraction/   IExtractor.cs, IExtractor{T}.cs, IExtractionSource.cs, IExtractionPipeline.cs
+│   │   ├── Extraction/   IExtractor.cs (incluye el enum SourceKind), IExtractor{T}.cs, IExtractionSource.cs, IExtractionPipeline.cs
 │   │   ├── Reading/      IFileReader{TRow}.cs, IFileReaderResolver.cs
 │   │   └── Persistence/  IStagingRepository{T}.cs
 │   ├── Extraction/       ExtractionPipeline.cs, ExtractionSource{T}.cs, ExtractionSettings.cs, SourceSettings.cs
@@ -171,7 +172,8 @@ src/Analytical/
 │   └── DependencyInjection.cs           AddApplication()
 ├── CustomersOpinions.Analytical.Infrastructure/
 │   ├── Configuration/    ConnectionStringsOptions.cs, ExtractionOptions.cs, SurveysSourceOptions.cs,
-│   │                     DatabaseSourceOptions.cs, SocialCommentsSourceOptions.cs
+│   │                     DatabaseSourceOptions.cs (opciones con nombre: WebReviews, Customers, Products),
+│   │                     SocialCommentsSourceOptions.cs, SecretHints.cs (mensajes con el comando user-secrets)
 │   ├── Extraction/
 │   │   ├── Base/         ExtractorBase.cs, FileExtractorBase.cs, DatabaseExtractorBase.cs, ApiExtractorBase.cs
 │   │   ├── Csv/          CsvSurveyExtractor.cs
@@ -180,16 +182,17 @@ src/Analytical/
 │   │   └── Api/          SocialCommentApiExtractor.cs
 │   ├── Sources/                         modelos con la forma de cada origen, agrupados por origen (pedido del profesor)
 │   │   ├── Csv/          SurveyFileRow.cs, SurveyFileRowMap.cs
-│   │   ├── Database/     WebReviewRow.cs, CustomerRow.cs, ProductRow.cs
+│   │   ├── Database/     WebReviewRow.cs, CustomerRow.cs, ProductRow.cs, DbValue.cs (valores tipados → texto invariante)
 │   │   └── Api/          SocialCommentDto.cs, PagedResponse.cs, SocialCommentsApiClient.cs
 │   ├── Reading/          CsvFileReader.cs, FileReaderResolver.cs
-│   ├── Persistence/      IDbConnectionFactory.cs, SqlConnectionFactory.cs, SqlBulkStagingRepository.cs,
+│   ├── Persistence/      IDbConnectionFactory.cs (incluye ConnectionNames), SqlConnectionFactory.cs, SqlBulkStagingRepository.cs,
 │   │                     StagingTableMap.cs, StagingTableMaps.cs
 │   └── DependencyInjection.cs           AddInfrastructure(IConfiguration)
 └── CustomersOpinions.Analytical.Worker/
     ├── Program.cs
     ├── ExtractionWorker.cs
     ├── WorkerOptions.cs                 RunMode (Once | Interval), IntervalMinutes
+    ├── StartupChecks.cs                 valida las opciones antes de iniciar y muestra mensajes legibles
     ├── Presentation/ConsoleReportRenderer.cs
     ├── appsettings.json
     ├── appsettings.Development.json
@@ -341,9 +344,11 @@ public interface IFileReader<TRow>
 
 public interface IFileReaderResolver
 {
-    IFileReader<TRow> Resolve<TRow>(string path);               // por extensión; Failure si no se soporta
+    Result<IFileReader<TRow>> Resolve<TRow>(string path);       // por extensión; Failure si no se soporta
 }
 ```
+
+> Implementado: `Resolve` devuelve `Result<IFileReader<TRow>>` para poder expresar el "Failure si no se soporta" sin excepciones.
 
 - **`CsvFileReader<TRow>`:** usa CsvHelper con `CultureInfo.InvariantCulture`, UTF-8 con detección de BOM, `TrimOptions.Trim`, un `ClassMap<TRow>` registrado y un buffer de lectura de 64 KB.
 - **Validación de encabezados:**
@@ -651,13 +656,17 @@ Así la práctica usa las dos técnicas de carga masiva que pidió el profesor: 
 }
 ```
 
+- En el código, `Serilog:MinimumLevel:Override` incluye además `"Polly": "Fatal"`: los reintentos del handler de resiliencia no llenan la consola de stack traces; el fallo de la fuente igual se registra con su motivo.
 - Las rutas relativas de `FilePath` se resuelven contra `AppContext.BaseDirectory`.
 - **Validaciones:**
   - `BatchSize` entre 1 y 100.000;
   - `MaxDegreeOfParallelism` entre 1 y 16;
   - `PageSize` entre 1 y 1.000;
   - `BaseUrl` debe ser una URL HTTPS absoluta cuando la fuente está habilitada;
-  - los timeouts deben ser mayores que 0.
+  - los timeouts deben ser mayores que 0;
+  - `RetryCount` entre 1 y 10 (mínimo que exige el handler de resiliencia estándar);
+  - `Sources:SocialComments:ApiKey` y `BaseUrl` solo se validan cuando la fuente está habilitada;
+  - si algo falla, el Worker no arranca y lista cada problema con el comando `dotnet user-secrets set ...` que lo corrige (`StartupChecks.cs`), sin stack trace y con código de salida 1.
 - **Desactivar una fuente** es solo un cambio de configuración (`Enabled: false`). Sirve como evidencia del requisito de escalabilidad.
 
 ---
@@ -714,6 +723,8 @@ El profesor va a preguntar qué patrones y principios se aplicaron en la capa de
 | Streaming / back-pressure | `IAsyncEnumerable<T>` + lotes acotados | Memoria constante; permite cumplir 50k en menos de 5 minutos. |
 | Composition Root | `Worker/Program.cs` + `DependencyInjection.cs` por capa | Un solo lugar conecta los tipos concretos. |
 | DRY / KISS | Repositorio staging genérico con mapas de tabla; sin capas innecesarias | Menos código que mantener. |
+| Data Mapper / mapa de tabla | `StagingTableMap<T>` + `StagingTableMaps` | Una sola definición de columnas por tabla: la usan el bulk insert, la lista de tablas permitidas para `TRUNCATE` y el control de largo que rechaza un valor antes de que haga fallar un lote. |
+| Scope por ejecución | Pipeline `Scoped`; el Worker crea un scope por ejecución | Cada ejecución (también en modo `Interval`) obtiene fuentes y clientes HTTP nuevos del `IHttpClientFactory`. |
 
 ---
 

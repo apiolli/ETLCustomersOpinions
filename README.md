@@ -98,3 +98,9 @@ flowchart LR
 5. Ejecutar la extracción: `dotnet run --project src/Analytical/CustomersOpinions.Analytical.Worker`
 
 El detalle de cada parte está en `src/Transactional/README.md` y `src/Analytical/README.md`.
+
+## Verificación y diagramas
+
+- `docs/MANUAL_VERIFICATION.md`: lista paso a paso para verificar todo en una máquina con SQL Server (conteos esperados, prueba de rendimiento y capturas).
+- `docs/diagrams/architecture.md` y `docs/diagrams/etl-flow.md`: diagramas Mermaid de la arquitectura, del flujo de extracción y de la secuencia de una fuente.
+- Prueba de rendimiento (50.000 encuestas): `dotnet run --project tools/CustomersOpinions.Tools.SurveyGenerator -- --count 50000 --output data/performance/surveys_50k.csv`, luego `src/Analytical/README.md` §12.
