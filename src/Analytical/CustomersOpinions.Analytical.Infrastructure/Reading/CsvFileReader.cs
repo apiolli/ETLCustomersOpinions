@@ -8,8 +8,6 @@ using CustomersOpinions.Analytical.Domain.Common;
 
 namespace CustomersOpinions.Analytical.Infrastructure.Reading;
 
-/// <summary>CsvHelper based <see cref="IFileReader{TRow}"/>: streams rows, validating the header first.</summary>
-/// <typeparam name="TRow">Row model, mapped by the registered <see cref="ClassMap{TRow}"/>.</typeparam>
 public sealed class CsvFileReader<TRow> : IFileReader<TRow>
 {
     private const int BufferSize = 64 * 1024;
@@ -28,12 +26,12 @@ public sealed class CsvFileReader<TRow> : IFileReader<TRow>
             yield break;
         }
 
+        string? badData = null;
         var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             TrimOptions = TrimOptions.Trim,
             MissingFieldFound = null,
-            HeaderValidated = null,
-            BadDataFound = null
+            BadDataFound = args => badData ??= args.Field
         };
 
         await using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, BufferSize, useAsync: true);
@@ -52,7 +50,11 @@ public sealed class CsvFileReader<TRow> : IFileReader<TRow>
         while (await csv.ReadAsync())
         {
             cancellationToken.ThrowIfCancellationRequested();
-            yield return ReadRow(csv, columns);
+            var row = ReadRow(csv, columns);
+            if (badData is not null && row.IsSuccess)
+                row = Result<TRow>.Failure(ErrorType.Validation, $"Row {csv.Parser.Row}: malformed field ({badData.Trim()})");
+            badData = null;
+            yield return row;
         }
     }
 
