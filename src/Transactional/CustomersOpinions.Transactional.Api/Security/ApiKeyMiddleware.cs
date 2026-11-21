@@ -3,10 +3,6 @@ using System.Text;
 
 namespace CustomersOpinions.Transactional.Api.Security;
 
-/// <summary>
-/// Requires the <c>X-Api-Key</c> header on every request except <c>/health</c> and <c>/swagger</c>.
-/// The key is compared in constant time.
-/// </summary>
 public sealed class ApiKeyMiddleware
 {
     public const string HeaderName = "X-Api-Key";
@@ -42,5 +38,5 @@ public sealed class ApiKeyMiddleware
     }
 
     private static bool IsAnonymousPath(PathString path) =>
-        path.StartsWithSegments("/health") || path.StartsWithSegments("/swagger");
+        path.StartsWithSegments("/health") || path.StartsWithSegments("/scalar") || path.StartsWithSegments("/openapi");
 }
