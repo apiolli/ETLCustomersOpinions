@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CustomersOpinions.Transactional.Data\CustomersOpinions.Transactional.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\data\csv\*.csv" Link="CsvFiles\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\..\data\csv-dirty\*.csv" Link="CsvFilesDirty\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
