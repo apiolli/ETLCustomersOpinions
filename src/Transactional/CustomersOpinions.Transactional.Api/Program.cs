@@ -2,6 +2,10 @@ using CustomersOpinions.Transactional.Api.Configuration;
 using CustomersOpinions.Transactional.Api.Data;
 using CustomersOpinions.Transactional.Api.Endpoints;
 using CustomersOpinions.Transactional.Api.Security;
+using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
+
+const string ApiKeyScheme = "ApiKey";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,15 +26,29 @@ builder.Services.AddOptions<PagingOptions>()
 
 builder.Services.AddSingleton<ISocialCommentRepository, SqlSocialCommentRepository>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomersOpinions Social Comments API", Version = "v1" });
+    options.AddSecurityDefinition(ApiKeyScheme, new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
+        Name = ApiKeyMiddleware.HeaderName
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = ApiKeyScheme } }] =
+            Array.Empty<string>()
+    });
+});
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwagger(options => options.RouteTemplate = "openapi/{documentName}.json");
+    app.MapScalarApiReference(options => options.WithTitle("CustomersOpinions Social Comments API"));
 }
 
 app.UseHttpsRedirection();
