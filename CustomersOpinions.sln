@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomersOpinions.Analytica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomersOpinions.Analytical.Application", "src\Analytical\CustomersOpinions.Analytical.Application\CustomersOpinions.Analytical.Application.csproj", "{9EB3B512-AC1F-4F1F-B2F3-E945C8BF9194}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomersOpinions.Analytical.Infrastructure", "src\Analytical\CustomersOpinions.Analytical.Infrastructure\CustomersOpinions.Analytical.Infrastructure.csproj", "{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,18 @@ Global
 		{9EB3B512-AC1F-4F1F-B2F3-E945C8BF9194}.Release|x64.Build.0 = Release|Any CPU
 		{9EB3B512-AC1F-4F1F-B2F3-E945C8BF9194}.Release|x86.ActiveCfg = Release|Any CPU
 		{9EB3B512-AC1F-4F1F-B2F3-E945C8BF9194}.Release|x86.Build.0 = Release|Any CPU
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}.Debug|x64.Build.0 = Debug|Any CPU
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}.Debug|x86.Build.0 = Debug|Any CPU
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}.Release|x64.ActiveCfg = Release|Any CPU
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}.Release|x64.Build.0 = Release|Any CPU
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}.Release|x86.ActiveCfg = Release|Any CPU
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,5 +121,6 @@ Global
 		{317BFA7E-6651-4347-9E46-D9BD968B0D30} = {EDF5FB2E-DDE1-D008-2042-90A1E3947BE8}
 		{23F0E958-026D-47BD-8F62-3E24C9FA06AC} = {A1B2C3D4-0001-4000-8000-000000000001}
 		{9EB3B512-AC1F-4F1F-B2F3-E945C8BF9194} = {A1B2C3D4-0001-4000-8000-000000000001}
+		{0E453BE9-D13A-4FEB-9E71-C371B12B38BA} = {A1B2C3D4-0001-4000-8000-000000000001}
 	EndGlobalSection
 EndGlobal
