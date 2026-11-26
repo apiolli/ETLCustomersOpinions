@@ -1,5 +1,6 @@
 using CsvHelper.Configuration;
 using CustomersOpinions.Analytical.Application.Abstractions.Extraction;
+using CustomersOpinions.Analytical.Application.Abstractions.Loading;
 using CustomersOpinions.Analytical.Application.Abstractions.Reading;
 using CustomersOpinions.Analytical.Application.Extraction;
 using CustomersOpinions.Analytical.Domain.Staging;
@@ -7,6 +8,7 @@ using CustomersOpinions.Analytical.Infrastructure.Configuration;
 using CustomersOpinions.Analytical.Infrastructure.Extraction.Api;
 using CustomersOpinions.Analytical.Infrastructure.Extraction.Csv;
 using CustomersOpinions.Analytical.Infrastructure.Extraction.Database;
+using CustomersOpinions.Analytical.Infrastructure.Loading;
 using CustomersOpinions.Analytical.Infrastructure.Persistence;
 using CustomersOpinions.Analytical.Infrastructure.Reading;
 using CustomersOpinions.Analytical.Infrastructure.Sources.Api;
@@ -30,6 +32,7 @@ public static class DependencyInjection
         AddValidatedOptions<ExtractionOptions>(services, configuration, ExtractionOptions.SectionName);
         AddValidatedOptions<SurveysSourceOptions>(services, configuration, SurveysSourceOptions.SectionName);
         AddValidatedOptions<SocialCommentsSourceOptions>(services, configuration, SocialCommentsSourceOptions.SectionName);
+        AddValidatedOptions<DimensionLoadOptions>(services, configuration, DimensionLoadOptions.SectionName);
         foreach (var name in new[] { DatabaseSourceOptions.WebReviews, DatabaseSourceOptions.Customers, DatabaseSourceOptions.Products })
         {
             services.AddOptions<DatabaseSourceOptions>(name)
@@ -63,6 +66,14 @@ public static class DependencyInjection
             sp => DatabaseEnabled(sp, DatabaseSourceOptions.Products));
         AddSource<StagingSocialComment, SocialCommentApiExtractor>(services, StagingTableMaps.SocialComments, "SocialComments (API)",
             sp => sp.GetRequiredService<IOptions<SocialCommentsSourceOptions>>().Value.Enabled);
+
+        services.AddTransient<IDimensionLoader, ClassificationDimensionLoader>();
+        services.AddTransient<IDimensionLoader, TimeDimensionLoader>();
+        services.AddTransient<IDimensionLoader, CustomerDimensionLoader>();
+        services.AddTransient<IDimensionLoader, ProductDimensionLoader>();
+        services.AddTransient<IDimensionLoader, ChannelDimensionLoader>();
+        services.AddTransient<IDimensionLoader, EventDimensionLoader>();
+        services.AddTransient<IDimensionLoader, KeywordDimensionLoader>();
 
         return services;
     }
