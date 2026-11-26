@@ -32,6 +32,36 @@ public sealed class ConsoleReportRenderer
         Console.WriteLine();
     }
 
+    public void Render(DimensionLoadReport report)
+    {
+        Console.WriteLine();
+        Console.WriteLine($"CustomersOpinions — Dimension load {report.StartedAt.ToString("yyyy-MM-dd HH:mm:ss", Culture)}");
+        Console.WriteLine(DimensionRow("Dimension", "Table", "Status", "Read", "Inserted", "Updated", "Unchanged",
+            "Rejected", "Elapsed", ""));
+
+        foreach (var r in report.Results)
+        {
+            var line = DimensionRow(r.DimensionName, r.TableName, Label(r.Status), Number(r.Read), Number(r.Inserted),
+                Number(r.Updated), Number(r.Unchanged), Number(r.Rejected), Time(r.Elapsed), r.Message);
+
+            if (r.Status == SourceStatus.Failed)
+                WriteColored(line, ConsoleColor.Red);
+            else if (r.Status == SourceStatus.CompletedWithRejections)
+                WriteColored(line, ConsoleColor.Yellow);
+            else
+                Console.WriteLine(line);
+        }
+
+        Console.WriteLine(DimensionRow("TOTAL", "", "", Number(report.TotalRead), Number(report.TotalInserted),
+            Number(report.TotalUpdated), Number(report.TotalUnchanged), Number(report.TotalRejected),
+            Time(report.Elapsed), ""));
+        Console.WriteLine();
+    }
+
+    private static string DimensionRow(string dimension, string table, string status, string read, string inserted,
+        string updated, string unchanged, string rejected, string elapsed, string message) =>
+        $"{dimension,-16}{table,-22}{status,-8}{read,8}{inserted,10}{updated,9}{unchanged,11}{rejected,10}{elapsed,10}   {message}".TrimEnd();
+
     private static string Row(string source, string table, string status, string read, string written,
         string rejected, string elapsed, string rowsPerSecond, string message) =>
         $"{source,-22}{table,-27}{status,-10}{read,8}{written,10}{rejected,10}{elapsed,10}{rowsPerSecond,9}   {message}".TrimEnd();

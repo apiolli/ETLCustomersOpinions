@@ -1,19 +1,20 @@
 using CustomersOpinions.Analytical.Application.Abstractions.Extraction;
+using CustomersOpinions.Analytical.Application.Abstractions.Loading;
 using CustomersOpinions.Analytical.Worker.Presentation;
 using Microsoft.Extensions.Options;
 
 namespace CustomersOpinions.Analytical.Worker;
 
-public sealed class ExtractionWorker : BackgroundService
+public sealed class EtlWorker : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ConsoleReportRenderer _renderer;
     private readonly IHostApplicationLifetime _lifetime;
     private readonly WorkerOptions _options;
-    private readonly ILogger<ExtractionWorker> _logger;
+    private readonly ILogger<EtlWorker> _logger;
 
-    public ExtractionWorker(IServiceScopeFactory scopeFactory, ConsoleReportRenderer renderer,
-        IHostApplicationLifetime lifetime, IOptions<WorkerOptions> options, ILogger<ExtractionWorker> logger)
+    public EtlWorker(IServiceScopeFactory scopeFactory, ConsoleReportRenderer renderer,
+        IHostApplicationLifetime lifetime, IOptions<WorkerOptions> options, ILogger<EtlWorker> logger)
     {
         _scopeFactory = scopeFactory;
         _renderer = renderer;
@@ -32,7 +33,7 @@ public sealed class ExtractionWorker : BackgroundService
                 return;
             }
 
-            _logger.LogInformation("Interval mode: extraction every {Minutes} minutes", _options.IntervalMinutes);
+            _logger.LogInformation("Interval mode: stage {Stage} every {Minutes} minutes", _options.Stage, _options.IntervalMinutes);
             using var timer = new PeriodicTimer(TimeSpan.FromMinutes(_options.IntervalMinutes));
             do
             {
@@ -42,12 +43,12 @@ public sealed class ExtractionWorker : BackgroundService
         }
         catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
         {
-            _logger.LogWarning("Extraction cancelled");
+            _logger.LogWarning("ETL run cancelled");
             Environment.ExitCode = 2;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Extraction worker failed");
+            _logger.LogError(ex, "ETL worker failed");
             Environment.ExitCode = 1;
         }
         finally
@@ -60,9 +61,29 @@ public sealed class ExtractionWorker : BackgroundService
     private async Task RunOnceAsync(CancellationToken stoppingToken)
     {
         await using var scope = _scopeFactory.CreateAsyncScope();
-        var pipeline = scope.ServiceProvider.GetRequiredService<IExtractionPipeline>();
-        var report = await pipeline.RunAsync(stoppingToken);
-        _renderer.Render(report);
-        Environment.ExitCode = report.AnyFailed ? 1 : 0;
+        var failed = false;
+
+        if (_options.Stage is EtlStage.All or EtlStage.Extraction)
+        {
+            var extraction = await scope.ServiceProvider.GetRequiredService<IExtractionPipeline>().RunAsync(stoppingToken);
+            _renderer.Render(extraction);
+            failed = extraction.AnyFailed;
+        }
+
+        if (_options.Stage is EtlStage.All or EtlStage.Dimensions)
+        {
+            if (failed)
+            {
+                _logger.LogWarning("Dimension load skipped because the extraction failed; staging may be incomplete");
+            }
+            else
+            {
+                var dimensions = await scope.ServiceProvider.GetRequiredService<IDimensionLoadPipeline>().RunAsync(stoppingToken);
+                _renderer.Render(dimensions);
+                failed = dimensions.AnyFailed;
+            }
+        }
+
+        Environment.ExitCode = failed ? 1 : 0;
     }
 }
