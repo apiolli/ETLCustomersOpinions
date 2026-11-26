@@ -23,7 +23,7 @@ public sealed class DimensionLoadPipeline : IDimensionLoadPipeline
     {
         var startedAt = _timeProvider.GetLocalNow().DateTime;
         var stopwatch = Stopwatch.StartNew();
-        _logger.LogInformation("Dimension load started with {Count} dimensions", _loaders.Count);
+        _logger.LogInformation("Loading {Count} dimensions...", _loaders.Count);
 
         var results = new List<DimensionLoadResult>(_loaders.Count);
         foreach (var loader in _loaders)
@@ -31,27 +31,24 @@ public sealed class DimensionLoadPipeline : IDimensionLoadPipeline
 
         stopwatch.Stop();
         var report = new DimensionLoadReport(startedAt, stopwatch.Elapsed, results);
-        _logger.LogInformation(
-            "Dimension load finished in {Elapsed}: read {Read}, inserted {Inserted}, updated {Updated}, unchanged {Unchanged}, rejected {Rejected}, failed dimensions {Failed}",
+        _logger.LogDebug(
+            "Dimension load finished in {Elapsed}: read {Read}, inserted {Inserted}, updated {Updated}, unchanged {Unchanged}, rejected {Rejected}",
             report.Elapsed, report.TotalRead, report.TotalInserted, report.TotalUpdated, report.TotalUnchanged,
-            report.TotalRejected, results.Count(r => r.Status == SourceStatus.Failed));
+            report.TotalRejected);
         return report;
     }
 
     private async Task<DimensionLoadResult> RunLoaderAsync(IDimensionLoader loader, CancellationToken cancellationToken)
     {
         var stopwatch = Stopwatch.StartNew();
-        _logger.LogInformation("Dimension {Dimension} started -> {Table}", loader.DimensionName, loader.TableName);
         try
         {
             var result = await loader.LoadAsync(cancellationToken);
             if (result.Status == SourceStatus.Failed)
-                _logger.LogError("Dimension {Dimension} failed: {Message}", loader.DimensionName, result.Message);
+                _logger.LogError("{Table} failed: {Message}", loader.TableName, result.Message);
             else
-                _logger.LogInformation(
-                    "Dimension {Dimension} finished in {Elapsed}: read {Read}, inserted {Inserted}, updated {Updated}, unchanged {Unchanged}, rejected {Rejected}",
-                    loader.DimensionName, result.Elapsed, result.Read, result.Inserted, result.Updated,
-                    result.Unchanged, result.Rejected);
+                _logger.LogDebug("{Table}: read {Read}, inserted {Inserted}, updated {Updated}, unchanged {Unchanged}, rejected {Rejected}",
+                    loader.TableName, result.Read, result.Inserted, result.Updated, result.Unchanged, result.Rejected);
             return result;
         }
         catch (OperationCanceledException)

@@ -4,6 +4,7 @@ using CustomersOpinions.Analytical.Infrastructure;
 using CustomersOpinions.Analytical.Worker;
 using CustomersOpinions.Analytical.Worker.Presentation;
 using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 
 Console.OutputEncoding = Encoding.UTF8;
 
@@ -14,7 +15,7 @@ builder.Services.AddWindowsService(options => options.ServiceName = "CustomersOp
 builder.Services.AddSerilog((_, logger) => logger
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
-    .WriteTo.Console()
+    .WriteTo.Console(theme: ConsoleTheme.None, outputTemplate: "[{Timestamp:HH:mm:ss}] {Message:lj}{NewLine}{Exception}")
     .WriteTo.File(Path.Combine(AppContext.BaseDirectory, "logs", "etl-.log"),
         rollingInterval: RollingInterval.Day, retainedFileCountLimit: 30));
 
